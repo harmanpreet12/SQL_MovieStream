@@ -1,0 +1,84 @@
+CREATE TABLE Studios (
+    studio_id INTEGER PRIMARY KEY,
+    name VARCHAR(255) NOT NULL UNIQUE,
+    country_of_origin VARCHAR(100) NOT NULL,
+    logo_image TEXT NOT NULL
+);
+
+CREATE TABLE Directors (
+    director_id INTEGER PRIMARY KEY,
+    first_name VARCHAR(100) NOT NULL,
+    last_name VARCHAR(100) NOT NULL,
+    country_of_birth VARCHAR(100) NOT NULL,
+    birthday DATE NOT NULL,
+    date_of_death DATE NOT NULL,
+    profile_photo TEXT NOT NULL,
+    biography TEXT NOT NULL,
+    awards_count INTEGER CHECK (awards_count >= 0) DEFAULT 0
+);
+
+CREATE TABLE Actors (
+    actor_id INTEGER PRIMARY KEY,
+    first_name VARCHAR(100) NOT NULL,
+    last_name VARCHAR(100) NOT NULL,
+    country_of_birth VARCHAR(100) NOT NULL,
+    birthday DATE NOT NULL,
+    date_of_death DATE NOT NULL,
+    profile_photo TEXT NOT NULL,
+    biography TEXT NOT NULL
+);
+
+CREATE TABLE Movies (
+    movie_id INTEGER PRIMARY KEY,
+    title VARCHAR(255) NOT NULL UNIQUE,
+    director_id INTEGER NOT NULL,
+    release_year INTEGER CHECK (release_year >= 1888),
+    user_rating DECIMAL(2,1) CHECK (user_rating BETWEEN 0 AND 5),
+    studio_id INTEGER NOT NULL,
+    actor_id INTEGER NOT NULL, 
+    genres VARCHAR(255) NOT NULL,
+    movie_poster TEXT NOT NULL,
+    description TEXT NOT NULL,
+    FOREIGN KEY (director_id) REFERENCES Directors(director_id) ON DELETE CASCADE,
+    FOREIGN KEY (studio_id) REFERENCES Studios(studio_id) ON DELETE CASCADE,
+    FOREIGN KEY (actor_id) REFERENCES Actors(actor_id) ON DELETE CASCADE
+);
+
+
+
+-- Inserting data into Studios table
+INSERT INTO Studios (studio_id, name, country_of_origin, logo_image) VALUES
+(1, 'Warner Bros.', 'United States', 'warner_bros_logo.png'),
+(2, 'Universal Pictures', 'United States', 'universal_pictures_logo.png'),
+(3, 'Paramount Pictures', 'United States', 'paramount_pictures_logo.png'),
+(4, '20th Century Studios', 'United States', '20th_century_studios_logo.png');
+
+select * from Studios;
+
+-- Inserting data into Directors table
+INSERT INTO Directors (director_id, first_name, last_name, country_of_birth, birthday, date_of_death, profile_photo, biography, awards_count) VALUES
+(1, 'Christopher', 'Nolan', 'United Kingdom', '1970-07-30', '9999-12-31', 'nolan_photo.png', 'Director of Inception and Interstellar.', 10),
+(2, 'Steven', 'Spielberg', 'United States', '1946-12-18', '9999-12-31', 'spielberg_photo.png', 'Director of Jurassic Park and Schindler''s List.', 20),
+(3, 'Martin', 'Scorsese', 'United States', '1942-11-17', '9999-12-31', 'scorsese_photo.png', 'Director of Goodfellas and The Irishman.', 15),
+(4, 'Alfred', 'Hitchcock', 'United Kingdom', '1899-08-13', '1980-04-29', 'hitchcock_photo.png', 'Director of Psycho and Rear Window.', 5);
+
+select * from Directors;
+
+-- Inserting data into Actors table
+INSERT INTO Actors (actor_id, first_name, last_name, country_of_birth, birthday, date_of_death, profile_photo, biography) VALUES
+(1, 'Leonardo', 'DiCaprio', 'United States', '1974-11-11', '1999-12-30', 'dicaprio_photo.png', 'Actor in Titanic and Inception.'),
+(2, 'Robert', 'Downey Jr.', 'United States', '1965-04-04', '1998-12-29', 'rdj_photo.png', 'Actor in Iron Man and Sherlock Holmes.'),
+(3, 'Morgan', 'Freeman', 'United States', '1937-06-01', '1998-12-28', 'freeman_photo.png', 'Actor in The Shawshank Redemption and Se7en.'),
+(4, 'Scarlett', 'Johansson', 'United States', '1984-11-22', '1997-12-27', 'johansson_photo.png', 'Actress in Lost in Translation and The Avengers.');
+
+
+select * from Actors;
+
+-- Inserting data into Movies table
+INSERT INTO Movies (movie_id, title, director_id, release_year, user_rating, studio_id, actor_id, genres, movie_poster, description) VALUES
+(1, 'Inception', 1, 2010, 4.8, 1, 1, 'Sci-Fi, Thriller', 'inception_poster.png', 'A thief enters dreams to steal secrets.'),
+(2, 'Jurassic Park', 2, 1993, 4.7, 2, 3, 'Adventure, Sci-Fi', 'jurassic_park_poster.png', 'A park with cloned dinosaurs turns dangerous.'),
+(3, 'The Irishman', 3, 2019, 4.6, 3, 3, 'Crime, Drama', 'irishman_poster.png', 'A hitman recalls his past with the mafia.'),
+(4, 'Pulp Fiction', 4, 1994, 4.9, 4, 2, 'Crime, Drama', 'pulp_fiction_poster.png', 'Interwoven stories of crime in Los Angeles.');
+
+select * from Movies;
